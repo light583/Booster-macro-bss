@@ -51,7 +51,7 @@ macOS requires explicit permissions for keyboard simulation and screen reading.
 
 * Set Roblox to **maximized** or **full-screen**.
 * Hotbar slots:
-  * **Slot 1**: Jelly Beans (spammed every start of scorch)
+  * **Slot 1**: Jelly Beans (spammed every start of scorch, or every ~30s if JB spam mode)
   * **Slot 2**: Stingers (spammed every ~10s)
   * **Slot 3**: Clouds (fired alongside Jelly Beans during Scorch activation)
   * **5th Ability Slot**: Scorching Star passive icon
