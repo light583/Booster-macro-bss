@@ -20,8 +20,8 @@ Lightweight automation tool for Bee Swarm Simulator on macOS. Automates Stinger 
 ### 1. Clone the repository
 
 ```bash
-git clone [https://github.com/YourUsername/your-repo-name.git](https://github.com/YourUsername/your-repo-name.git)
-cd your-repo-name
+git clone https://github.com/light583/Booster-macro-bss.git
+cd Booster-macro-bss
 ```
 
 ### 2. Install dependencies
