@@ -22,9 +22,9 @@ else:
 IMAGE_NAME = 'Scorch.png'
 TEMPLATE_FILE = os.path.join(application_path, IMAGE_NAME)
 
-KEY_CLOUDS = 18      
-KEY_STINGERS = 19    
-KEY_JELLYBEANS = 20  
+KEY_CLOUDS = 18  
+KEY_STINGERS = 19 
+KEY_JELLYBEANS = 20 
 X_PERCENT = 0.4464  
 Y_PERCENT = 0.8686  
 
@@ -41,15 +41,12 @@ CFRelease.argtypes = [ctypes.c_void_p]
 CFRelease.restype = None
 
 def human_sleep(target_time, max_variance):
-    # Bounded uniform distribution to dodge zero-millisecond and identical polling flags
     actual_time = target_time + random.uniform(-max_variance, max_variance)
     time.sleep(max(0.001, actual_time))
 
 def mac_tap(keycode):
     event_down = CG.CGEventCreateKeyboardEvent(None, keycode, True)
     CG.CGEventPost(0, event_down)
-    
-    # Actuation delay simulating physical mechanical switch travel time
     human_sleep(0.03, 0.005) 
     
     event_up = CG.CGEventCreateKeyboardEvent(None, keycode, False)
@@ -75,6 +72,7 @@ class MacroApp:
         self.extract_baseline_color()
         
         threading.Thread(target=self.upkeep_stinger, daemon=True).start()
+        threading.Thread(target=self.upkeep_jellybeans, daemon=True).start()
         threading.Thread(target=self.scan_scorch_activation, daemon=True).start()
         
         self.listener = keyboard.GlobalHotKeys({
@@ -158,8 +156,19 @@ class MacroApp:
         while True:
             self.is_running.wait()
             mac_tap(KEY_STINGERS)
-            
             wait_time = 10.0 + random.uniform(-0.5, 0.5)
+            end_time = time.time() + wait_time
+            
+            while time.time() < end_time:
+                if not self.is_running.is_set():
+                    break
+                time.sleep(0.25)
+                
+    def upkeep_jellybeans(self):
+        while True:
+            self.is_running.wait()
+            mac_tap(KEY_CLOUDS)
+            wait_time = 30.5 + random.uniform(0.1, 0.5)
             end_time = time.time() + wait_time
             
             while time.time() < end_time:
@@ -175,6 +184,7 @@ class MacroApp:
             screen_width = monitor["width"]
             screen_height = monitor["height"]
             
+            # Reverted to original 1x1 pixel capture region
             calc_left = int(screen_width * X_PERCENT)
             calc_top = int(screen_height * Y_PERCENT)
             
@@ -190,7 +200,7 @@ class MacroApp:
                 
                 current_color = np.mean(img, axis=(0, 1))
                 color_diff = np.linalg.norm(self.target_color - current_color)
-
+                
                 is_match = color_diff < 30.0 
 
                 if is_match:
