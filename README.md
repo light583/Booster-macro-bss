@@ -1,3 +1,6 @@
+© 2026 [light583]. All Rights Reserved.
+
+
 # Booster Macro v1.0 (macOS)
 
 Lightweight automation tool for Bee Swarm Simulator on macOS. Automates Stinger and Jelly Bean upkeeps alongside Scorching Star activation detection using pixel buffer monitoring.
